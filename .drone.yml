@@ -1,4 +1,4 @@
-rigger_common: &trigger_common
+trigger_common: &trigger_common
   image: plugins/downstream
   fork: true
   secrets: [ downstream_token, downstream_server ]
