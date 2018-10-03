@@ -21,14 +21,17 @@ pipeline:
         else
           docker build -t metwork/mfxxx-centos6-buildimage:${DRONE_BRANCH} --build-arg BRANCH=master --build-arg CACHEBUST=${DRONE_BUILD_NUMBER} .;
         fi
-      - if test "${DRONE_BRANCH}" = "master"; then
-          docker push metwork/mfxxx-centos6-buildimage:${DRONE_BRANCH}
-          docker push metwork/mfxxx-centos6-buildimage:latest;
-        elif test "${DRONE_BRANCH}" = "integration"; then
-          docker push metwork/mfxxx-centos6-buildimage:${DRONE_BRANCH};
-        fi 
       - HASH_AFTER=`docker images -q metwork/mfxxx-centos6-buildimage:${DRONE_BRANCH}`
-      - if test "$${HASH_BEFORE}" = "$${HASH_AFTER}"; then touch .drone_downstream_bypass; fi
+      - if test "$${HASH_BEFORE}" = "$${HASH_AFTER}"; then
+          touch .drone_downstream_bypass;
+        else
+          if test "${DRONE_BRANCH}" = "master"; then
+            docker push metwork/mfxxx-centos6-buildimage:${DRONE_BRANCH};
+            docker push metwork/mfxxx-centos6-buildimage:latest;
+          elif test "${DRONE_BRANCH}" = "integration"; then
+            docker push metwork/mfxxx-centos6-buildimage:${DRONE_BRANCH};
+          fi;
+        fi
     when:
        event: push 
   trigger_master:
