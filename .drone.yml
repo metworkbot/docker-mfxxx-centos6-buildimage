@@ -1,5 +1,5 @@
 trigger_common: &trigger_common
-  image: metwork/drone-downstream-specific-image
+  image: metwork/drone-downstream-specific-image:${DRONE_BRANCH}
   pull: true
   secrets: [ downstream_token, downstream_server ]
   params:
